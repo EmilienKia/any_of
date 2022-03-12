@@ -80,14 +80,14 @@ typedef any_of<base, base, dep1, dep11, dep2> any_dep;
 typedef any_of<base, base, dep1, dep2, dep3> any_other_dep;
 
 
-TEST_CASE("AnyOf default construct", "[tools]") {
+TEST_CASE("AnyOf default construct", "[any_of]") {
     any_dep d1;
     REQUIRE( d1->value() == 0 );
     REQUIRE( std::holds_alternative<base>(d1) == true );
     REQUIRE( d1.is<base>() );
 }
 
-TEST_CASE("AnyOf copy construct", "[tools]") {
+TEST_CASE("AnyOf copy construct", "[any_of]") {
     any_dep d1;
     REQUIRE(d1->value() == 0);
 
@@ -102,7 +102,7 @@ TEST_CASE("AnyOf copy construct", "[tools]") {
     REQUIRE(d3.is<base>());
 }
 
-TEST_CASE("AnyOf another copy construct", "[tools]") {
+TEST_CASE("AnyOf another copy construct", "[any_of]") {
     dep1 d;
     any_dep d1(d);
     REQUIRE(d1->value() == 1);
@@ -118,7 +118,7 @@ TEST_CASE("AnyOf another copy construct", "[tools]") {
     REQUIRE(d3.is<dep1>());
 }
 
-TEST_CASE("AnyOf init construct", "[tools]") {
+TEST_CASE("AnyOf init construct", "[any_of]") {
     any_dep d1(dep2{});
     REQUIRE(d1->value() == 2);
     REQUIRE(std::holds_alternative<dep2>(d1));
@@ -134,7 +134,7 @@ TEST_CASE("AnyOf init construct", "[tools]") {
 }
 
 
-TEST_CASE("AnyOf copy assignment", "[tools]")
+TEST_CASE("AnyOf copy assignment", "[any_of]")
 {
     any_dep d1(dep2{});
     any_dep d2;
@@ -144,7 +144,7 @@ TEST_CASE("AnyOf copy assignment", "[tools]")
     REQUIRE(d2.is<dep2>());
 }
 
-TEST_CASE("AnyOf move assignment", "[tools]")
+TEST_CASE("AnyOf move assignment", "[any_of]")
 {
     any_dep d1(dep2{});
     any_dep d2;
@@ -154,7 +154,7 @@ TEST_CASE("AnyOf move assignment", "[tools]")
     REQUIRE(d2.is<dep2>());
 }
 
-TEST_CASE("AnyOf init assignment", "[tools]")
+TEST_CASE("AnyOf init assignment", "[any_of]")
 {
     dep2 d;
     any_dep d1;
@@ -164,7 +164,7 @@ TEST_CASE("AnyOf init assignment", "[tools]")
     REQUIRE(d1.is<dep2>());
 }
 
-TEST_CASE("AnyOf init move construct", "[tools]")
+TEST_CASE("AnyOf init move construct", "[any_of]")
 {
     dep2 d;
     any_dep d1;
@@ -174,7 +174,7 @@ TEST_CASE("AnyOf init move construct", "[tools]")
     REQUIRE(d1->value() == 2);
 }
 
-TEST_CASE("AnyOf emplace", "[tools]")
+TEST_CASE("AnyOf emplace", "[any_of]")
 {
     any_dep d1;
     d1.emplace<dep2>(4);
@@ -183,7 +183,7 @@ TEST_CASE("AnyOf emplace", "[tools]")
     REQUIRE(d1->value() == 4);
 }
 
-TEST_CASE("AnyOf swap", "[tools]")
+TEST_CASE("AnyOf swap", "[any_of]")
 {
     any_dep d1{ dep1{} };
     any_dep d2{ dep2{} };
@@ -194,7 +194,7 @@ TEST_CASE("AnyOf swap", "[tools]")
     REQUIRE(d2->value() == 1);
 }
 
-TEST_CASE("AnyOf get", "[tools]")
+TEST_CASE("AnyOf get", "[any_of]")
 {
     any_dep d{ dep2{} };
     dep2& d2 = d.get<dep2>();
@@ -204,7 +204,7 @@ TEST_CASE("AnyOf get", "[tools]")
     }(), std::bad_variant_access);
 }
 
-TEST_CASE("AnyOf get if", "[tools]")
+TEST_CASE("AnyOf get if", "[any_of]")
 {
     any_dep d{ dep2{} };
     dep2* d2 = d.get_if<dep2>();
@@ -213,7 +213,7 @@ TEST_CASE("AnyOf get if", "[tools]")
     REQUIRE(d1 == nullptr);
 }
 
-TEST_CASE("AnyOf other compatible assignation", "[tools]")
+TEST_CASE("AnyOf other compatible assignation", "[any_of]")
 {
     any_dep d2{ dep2{} };
     any_other_dep other;
@@ -222,7 +222,7 @@ TEST_CASE("AnyOf other compatible assignation", "[tools]")
     REQUIRE(other->value() == 2);
 }
 
-TEST_CASE("AnyOf other incompatible assignation", "[tools]")
+TEST_CASE("AnyOf other incompatible assignation", "[any_of]")
 {
     any_dep d11{ dep11{} };
     any_other_dep other;
@@ -231,7 +231,7 @@ TEST_CASE("AnyOf other incompatible assignation", "[tools]")
     }(), std::bad_variant_access);
 }
 
-TEST_CASE("AnyOf other incompatible construct", "[tools]")
+TEST_CASE("AnyOf other incompatible construct", "[any_of]")
 {
     any_dep d11{ dep11{} };
     REQUIRE_THROWS_AS([&]() {
@@ -239,7 +239,7 @@ TEST_CASE("AnyOf other incompatible construct", "[tools]")
     }(), std::bad_variant_access);
 }
 
-TEST_CASE("AnyOf construct from AnyOfOpt", "[tools]")
+TEST_CASE("AnyOf construct from AnyOfOpt", "[any_of]")
 {
     any_dep::any_of_opt_t d1{ dep1{} };
     any_dep d2{ d1 };
@@ -247,7 +247,7 @@ TEST_CASE("AnyOf construct from AnyOfOpt", "[tools]")
     REQUIRE(d2->value() == 1);
 }
 
-TEST_CASE("AnyOf construct from empty AnyOfOpt", "[tools]")
+TEST_CASE("AnyOf construct from empty AnyOfOpt", "[any_of]")
 {
     any_dep::any_of_opt_t d1{ };
     REQUIRE_THROWS_AS([&]() {
@@ -255,7 +255,7 @@ TEST_CASE("AnyOf construct from empty AnyOfOpt", "[tools]")
         }(), std::bad_variant_access);
 }
 
-TEST_CASE("AnyOf other incompatible construct from AnyOfOpt", "[tools]")
+TEST_CASE("AnyOf other incompatible construct from AnyOfOpt", "[any_of]")
 {
     any_dep::any_of_opt_t d11{ dep11{} };
     REQUIRE_THROWS_AS([&]() {
